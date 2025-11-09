@@ -38,7 +38,9 @@ async function run() {
 			if (email) {
 				query.email = email;
 			}
-			const cursor = transactionsCollection.find(query);
+			const cursor = transactionsCollection.find(query).sort({
+				created_at: -1,
+			});
 			const result = await cursor.toArray();
 			res.status(200).send(result);
 		});
