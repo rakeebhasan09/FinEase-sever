@@ -25,7 +25,7 @@ app.get("/", (req, res) => {
 
 async function run() {
 	try {
-		await client.connect(); // Must be comment before deploy
+		// await client.connect(); // Must be comment before deploy
 
 		// DataBase and Collections Connection
 		const database = client.db("finease");
@@ -43,6 +43,14 @@ async function run() {
 			res.status(200).send(result);
 		});
 
+		// Get Transaction By ID
+		app.get("/transactions/:id", async (req, res) => {
+			const { id } = req.params;
+			const query = { _id: new ObjectId(id) };
+			const result = await transactionsCollection.findOne(query);
+			res.status(200).send(result);
+		});
+
 		// Insert Transaction
 		app.post("/transactions", async (req, res) => {
 			const newTransaction = req.body;
@@ -52,10 +60,10 @@ async function run() {
 			res.send(result);
 		});
 
-		await client.db("admin").command({ ping: 1 });
-		console.log(
-			"Pinged your deployment. You successfully connected to MongoDB!"
-		);
+		// await client.db("admin").command({ ping: 1 });
+		// console.log(
+		// 	"Pinged your deployment. You successfully connected to MongoDB!"
+		// );
 	} finally {
 	}
 }
