@@ -31,6 +31,18 @@ async function run() {
 		const database = client.db("finease");
 		const transactionsCollection = database.collection("transactions");
 
+		// Get All Transaction
+		app.get("/transactions", async (req, res) => {
+			const email = req.query.email;
+			const query = {};
+			if (email) {
+				query.email = email;
+			}
+			const cursor = transactionsCollection.find(query);
+			const result = await cursor.toArray();
+			res.status(200).send(result);
+		});
+
 		// Insert Transaction
 		app.post("/transactions", async (req, res) => {
 			const newTransaction = req.body;
