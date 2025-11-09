@@ -60,6 +60,27 @@ async function run() {
 			res.send(result);
 		});
 
+		// Update Transaction
+		app.patch("/transactions/:id", async (req, res) => {
+			const { id } = req.params;
+			const query = { _id: new ObjectId(id) };
+			const updateInfo = req.body;
+			const update = {
+				$set: {
+					transaction_type: updateInfo.transaction_type,
+					transaction_category: updateInfo.transaction_category,
+					transaction_amount: updateInfo.transaction_amount,
+					description: updateInfo.description,
+					transaction_date: updateInfo.transaction_date,
+				},
+			};
+			const result = await transactionsCollection.updateOne(
+				query,
+				update
+			);
+			res.send(result);
+		});
+
 		// Delete Transaction
 		app.delete("/transactions/:id", async (req, res) => {
 			const { id } = req.params;
