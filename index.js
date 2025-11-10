@@ -45,6 +45,18 @@ async function run() {
 			res.status(200).send(result);
 		});
 
+		// Get Data For Chart
+		app.get("/report-data", async (req, res) => {
+			const email = req.query.email;
+			const query = {};
+			if (email) {
+				query.email = email;
+			}
+			const cursor = transactionsCollection.find(query);
+			const result = await cursor.toArray();
+			res.status(200).send(result);
+		});
+
 		// Get Transaction By ID
 		app.get("/transactions/:id", async (req, res) => {
 			const { id } = req.params;
@@ -56,6 +68,7 @@ async function run() {
 		// Insert Transaction
 		app.post("/transactions", async (req, res) => {
 			const newTransaction = req.body;
+			newTransaction.date = new Date(newTransaction.date);
 			const result = await transactionsCollection.insertOne(
 				newTransaction
 			);
